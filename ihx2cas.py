@@ -23,6 +23,7 @@ if __name__ == "__main__":
     parser = OptionParser(usage=usage)
     parser.add_option( "-o", dest="cass",  help="Cassette file name", metavar="CASS", default='out.cas' )
     parser.add_option( "-n", dest="name",  help="Name of program", metavar="NAME", default='MYPRGM' )
+    parser.add_option("-v", action="store_true", dest="verbose")
     (options, args) = parser.parse_args()
     if 1!=len(args):
         exit( "Missing input .ihx file!" )
@@ -67,13 +68,13 @@ if __name__ == "__main__":
                 cassdata += chr(intchar)
             cassdata += chr(cs)
             g.write( cassdata )
-        print "%3d %2d %10s %1d %3d %s" % (lc, ihx_bytecount(line), ihx_address(line), ihx_addtype( line ), ihx_checksum(line), ihx_data(line) )
+        if options.verbose:
+            print "%3d %2d %10s %1d %3d %s" % (lc, ihx_bytecount(line), ihx_address(line), ihx_addtype( line ), ihx_checksum(line), ihx_data(line) )
     f.close()
     # End of cassette file
     g.write( chr(120) )
     # Start address
     g.write( chr(tmsb)+chr(tlsb) )
     g.close()
-    print
-    print lc, "lines read."
-    print casslc, "blocks written."
+    print "\t", lc, "lines read."
+    print "\t", casslc, "blocks written."

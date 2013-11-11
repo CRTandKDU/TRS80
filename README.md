@@ -26,6 +26,8 @@ Cryptographic Experiments
 
 Experimental implementations for the [Chacha stream cipher](http://cr.yp.to/chacha.html) and scalar multiplication on the elliptic curve [Curve25519](http://cr.yp.to/ecdh.html#curve25519-paper) for the TRS-80 are provided respectively as `chacha.cas` and `ecctrs.cas`.
 
+Implementations of several variants of the [Keccak sponge function family](http://keccak.noekeon.org/), and recent winner of the SHA-3 competition are also presented. States of size 200, 400, 800 and 1600 bits only are implemented in respectively `kcktrs8.cas`, `kcktrs16.cas`, `kcktrs32.cas`, and `kcktrs64.cas` cassette files.
+
 These implementations, detailed discussion and experimental results are published in the Cryptology ePrint Archive as [TRS-80 with a grain of salt](http://eprint.iacr.org/2013/546).
 
 ### Running CHACHA
@@ -55,6 +57,21 @@ and after the machine code is loaded,
     *? /
 
 to start execution of the Curve25519 scalar multiplication used as a test case in the [Cryptology in NaCl](cr.yp.to/highspeed/naclcrypto-20090310.pdf) paper. The secret key is hard-coded but can be changed by *poking* at the appropriate addresses (depending on where the base code address, an argument to `sdcc`, is set). For instance, if the base code segment is at 0x4A00H, the 32 bytes of the secret key are located at 0x4AC1H, 0x4AC7H, 0x4ACCH, 0x4AD1H, ..., 0x4B58H, 0x4B60H. (Note the uneven increment between first and second bytes, and between the penultimate and last bytes.)
+
+### Running KECCAK
+
+All the Keccak cassette files are built with the `make` command. We used GNUWin32 make to run the provided `makefile`.
+
+Once built, place the `kcktrsN.cas` cassette file in the tape emulator or in the PlayCAS application, then at the `>` prompt on the TRS-80 issue the following commands:
+
+    SYSTEM
+    *? KECCAK
+
+and after the machine code is loaded, 
+
+    *? /
+
+to start execution of the Keccak block cipher on a hard-coded initial state.
 
 Solving Sudoku
 --------------
