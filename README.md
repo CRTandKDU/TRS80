@@ -94,3 +94,9 @@ Once the program is correctly loaded, change the cassette file to `grid.cas` and
 command.
 
 There is still much work to do based on this backtracking solver, namely a GUI to set a puzzle up with some known values, and a better display of results, intermediary computations and statistics during the search process. (Some sound effects could be nice too, [Leo Christopherson's style](http://leochristopherson.com/).)
+
+Playing 2048
+--------------
+
+`GAME2048.cas` is a BASIC implementation of the puzzle game [2048](http://gabrielecirulli.github.io/2048/).  In this version moves are entered with the corresponding arrows; type `Q` to quit.  The goal, defaulting to 16, is displayed in the upper left corner. Number of moves and current scores are shown on the first line.
+
