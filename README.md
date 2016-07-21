@@ -100,3 +100,13 @@ Playing 2048
 
 `GAME2048.cas` is a BASIC implementation of the puzzle game [2048](http://gabrielecirulli.github.io/2048/).  In this version moves are entered with the corresponding arrows; type `Q` to quit.  The goal, defaulting to 16, is displayed in the upper left corner. Number of moves and current scores are shown on the first line.
 
+Info files
+--------------
+
+`info.asm` is a command file, tested under LDOS 5.3.1, that prints the summary of nodes in a Texinfo-produced info file passed as an argument in the invocation:
+
+INFO MYFILE/INF
+
+It looks for the `Tag List:` special node at the end of the file and simply parses its entries.
+
+Use z80asm to build.
