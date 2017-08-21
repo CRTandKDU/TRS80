@@ -58,7 +58,7 @@ void main( void ){
 #endif
   }
 #ifdef _TRS80
-  state_print();
+  /* state_print(); */
   /* Jump back to BASIC */
   __asm
     ld		a,#0x0d		; CR
@@ -76,13 +76,62 @@ void spbox_zerocy(){
 /** Rotates in column, left by 24 and by 9, in place
  */
 void spbox_rotate( char col ){
-  char c, *p = (char *)(state+col);
+  /* char *p, c; */
   /* Rotate x left by 24b in place: as 3 x 8b */
-  c = p[0]; p[0] = p[1]; p[1]=p[2]; p[2]=p[3]; p[3]=c;
+  __asm
+	push	ix
+	ld	ix,#0
+	add	ix,sp
+
+        ld	l,4 (ix)
+	ld	a,4 (ix)
+	rla
+	sbc	a, a
+	ld	h,a
+	add	hl, hl
+	add	hl, hl
+	ld	de,#_state
+	add	hl,de
+	ld	e, l
+	ld	d, h
+    ld a,(de)
+    push de
+    pop hl
+    inc hl
+    ld c,#0x03
+    ld b,#0x00
+    ldir
+    ld (de),a;
+  __endasm;
   /* Rotate y left by 9b in place: as 1b + 8b */
-  p = (char *)(state+col+4);
+  /* p = (char *)(state+col+4); */
+  /* c = p[3]; p[3]=c; */
   /* Check in gen asm which register pair got `p' and push it first */
   __asm
+  	ld	l,4 (ix)
+  	ld	a,4 (ix)
+  	rla
+  	sbc	a, a
+  	ld	h,a
+  	add	hl, hl
+  	add	hl, hl
+  	ld	de,#_state
+  	add	hl,de
+        ld bc, #0x10
+        add hl,bc
+  	ld	e, l
+  	ld	d, h
+    inc de
+    inc de
+    push de
+    pop hl
+    inc de
+    ld a,(de)
+    ld c,#0x03
+    ld b,#0x00
+    lddr
+    ld (de), a
+  /* __asm */
     push de
     pop iy
     ld a,3 (iy)
@@ -91,8 +140,8 @@ void spbox_rotate( char col ){
     rl 1 (iy)
     rl 2 (iy)
     rl 3 (iy)
+    pop ix
     __endasm;
-  c = p[3]; p[3]=p[2]; p[2]=p[1]; p[1]=p[0]; p[0]=c;
   return;
 }
 
@@ -118,6 +167,13 @@ void state_print_org(){
 void state_print(){
   char row, col, b, c;
   char *p;
+  int i;
+  for( i=0; i<10; i++ ){
+    hex[i] = i + 48;
+  }
+  for( i=0; i <6; i++ ){
+    hex[i+10] = i + 65;
+  }
   
   for( row = 0; row < 3; row++ ){
     for( col = 0; col < 4; col++ ){
@@ -136,4 +192,4 @@ void state_print(){
 }
 #endif
 
-#include "gimli-print.c"
+/* #include "gimli-print.c" */
