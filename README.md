@@ -47,8 +47,10 @@ and after the machine code is loaded,
     *? /
 
 to start execution of the Gimli permutation on a hard-coded all-null initial state. Refer to the paper for additional usage scenarios.
+<p align="center">
+<img src="https://github.com/CRTandKDU/TRS80/blob/master/rotate-2.png" width="400"  />
+</p>
 
-![Screenshot](https://github.com/CRTandKDU/TRS80/master/rotate-2.png "Result of running Gimli on all-zero state")
 
 ### Running CHACHA
 
