@@ -1,0 +1,904 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.3.0 #8604 (May 11 2013) (MINGW32)
+                              4 ; This file was generated Mon Aug 21 10:05:42 2017
+                              5 ;--------------------------------------------------------
+                              6 	.module gimli_permutation
+                              7 	.optsdcc -mz80
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _state
+                             14 	.globl _hex
+                             15 	.globl _cy
+                             16 	.globl _hexc
+                             17 	.globl _v
+                             18 	.globl _u
+                             19 	.globl _z
+                             20 	.globl _y
+                             21 	.globl _x
+                             22 	.globl _spbox_zerocy
+                             23 	.globl _spbox_rotate
+                             24 	.globl _spbox_x
+                             25 	.globl _spbox_y
+                             26 	.globl _spbox_z
+                             27 ;--------------------------------------------------------
+                             28 ; special function registers
+                             29 ;--------------------------------------------------------
+                             30 ;--------------------------------------------------------
+                             31 ; ram data
+                             32 ;--------------------------------------------------------
+                             33 	.area _DATA
+   0000                      34 _x::
+   0000                      35 	.ds 4
+   0004                      36 _y::
+   0004                      37 	.ds 4
+   0008                      38 _z::
+   0008                      39 	.ds 4
+   000C                      40 _u::
+   000C                      41 	.ds 4
+   0010                      42 _v::
+   0010                      43 	.ds 4
+   0014                      44 _hexc::
+   0014                      45 	.ds 1
+                             46 ;--------------------------------------------------------
+                             47 ; ram data
+                             48 ;--------------------------------------------------------
+                             49 	.area _INITIALIZED
+   0000                      50 _cy::
+   0000                      51 	.ds 1
+   0001                      52 _hex::
+   0001                      53 	.ds 16
+   0011                      54 _state::
+   0011                      55 	.ds 48
+                             56 ;--------------------------------------------------------
+                             57 ; absolute external ram data
+                             58 ;--------------------------------------------------------
+                             59 	.area _DABS (ABS)
+                             60 ;--------------------------------------------------------
+                             61 ; global & static initialisations
+                             62 ;--------------------------------------------------------
+                             63 	.area _HOME
+                             64 	.area _GSINIT
+                             65 	.area _GSFINAL
+                             66 	.area _GSINIT
+                             67 ;--------------------------------------------------------
+                             68 ; Home
+                             69 ;--------------------------------------------------------
+                             70 	.area _HOME
+                             71 	.area _HOME
+                             72 ;--------------------------------------------------------
+                             73 ; code
+                             74 ;--------------------------------------------------------
+                             75 	.area _CODE
+                             76 ;gimli-permutation.c:20: void main( void ){
+                             77 ;	---------------------------------
+                             78 ; Function main
+                             79 ; ---------------------------------
+   0000                      80 _main_start::
+   0000                      81 _main:
+   0000 DD E5         [15]   82 	push	ix
+   0002 DD 21 00 00   [14]   83 	ld	ix,#0
+   0006 DD 39         [15]   84 	add	ix,sp
+   0008 21 F6 FF      [10]   85 	ld	hl,#-10
+   000B 39            [11]   86 	add	hl,sp
+   000C F9            [ 6]   87 	ld	sp,hl
+                             88 ;gimli-permutation.c:23: for( round=24; round > 0; round-- ){
+   000D 21 18 00      [10]   89 	ld	hl,#0x0018
+   0010 E3            [19]   90 	ex	(sp), hl
+                             91 ;gimli-permutation.c:24: for( col=0; col<4; col++ ){
+   0011                      92 00115$:
+   0011 16 00         [ 7]   93 	ld	d,#0x00
+   0013                      94 00109$:
+                             95 ;gimli-permutation.c:26: spbox_zerocy();
+   0013 D5            [11]   96 	push	de
+   0014 CDrF2r02      [17]   97 	call	_spbox_zerocy
+   0017 D1            [10]   98 	pop	de
+                             99 ;gimli-permutation.c:28: spbox_rotate( col );
+   0018 D5            [11]  100 	push	de
+   0019 D5            [11]  101 	push	de
+   001A 33            [ 6]  102 	inc	sp
+   001B CDrF8r02      [17]  103 	call	_spbox_rotate
+   001E 33            [ 6]  104 	inc	sp
+   001F D1            [10]  105 	pop	de
+                            106 ;gimli-permutation.c:29: x = state[col]; y = state[col+4]; z = state[col+8];
+   0020 7A            [ 4]  107 	ld	a,d
+   0021 6F            [ 4]  108 	ld	l,a
+   0022 17            [ 4]  109 	rla
+   0023 9F            [ 4]  110 	sbc	a, a
+   0024 67            [ 4]  111 	ld	h,a
+   0025 29            [11]  112 	add	hl, hl
+   0026 29            [11]  113 	add	hl, hl
+   0027 3Er11         [ 7]  114 	ld	a,#<(_state)
+   0029 85            [ 4]  115 	add	a, l
+   002A 4F            [ 4]  116 	ld	c,a
+   002B 3Es00         [ 7]  117 	ld	a,#>(_state)
+   002D 8C            [ 4]  118 	adc	a, h
+   002E 47            [ 4]  119 	ld	b,a
+   002F 69            [ 4]  120 	ld	l, c
+   0030 60            [ 4]  121 	ld	h, b
+   0031 7E            [ 7]  122 	ld	a,(hl)
+   0032 FD 21r00r00   [14]  123 	ld	iy,#_x
+   0036 FD 77 00      [19]  124 	ld	0 (iy),a
+   0039 23            [ 6]  125 	inc	hl
+   003A 7E            [ 7]  126 	ld	a,(hl)
+   003B FD 21r00r00   [14]  127 	ld	iy,#_x
+   003F FD 77 01      [19]  128 	ld	1 (iy),a
+   0042 23            [ 6]  129 	inc	hl
+   0043 7E            [ 7]  130 	ld	a,(hl)
+   0044 FD 21r00r00   [14]  131 	ld	iy,#_x
+   0048 FD 77 02      [19]  132 	ld	2 (iy),a
+   004B 23            [ 6]  133 	inc	hl
+   004C 7E            [ 7]  134 	ld	a,(hl)
+   004D 32r03r00      [13]  135 	ld	(#_x + 3),a
+   0050 7A            [ 4]  136 	ld	a,d
+   0051 C6 04         [ 7]  137 	add	a, #0x04
+   0053 6F            [ 4]  138 	ld	l,a
+   0054 17            [ 4]  139 	rla
+   0055 9F            [ 4]  140 	sbc	a, a
+   0056 67            [ 4]  141 	ld	h,a
+   0057 29            [11]  142 	add	hl, hl
+   0058 29            [11]  143 	add	hl, hl
+   0059 3Er11         [ 7]  144 	ld	a,#<(_state)
+   005B 85            [ 4]  145 	add	a, l
+   005C DD 77 FE      [19]  146 	ld	-2 (ix),a
+   005F 3Es00         [ 7]  147 	ld	a,#>(_state)
+   0061 8C            [ 4]  148 	adc	a, h
+   0062 DD 77 FF      [19]  149 	ld	-1 (ix),a
+   0065 DD 6E FE      [19]  150 	ld	l,-2 (ix)
+   0068 DD 66 FF      [19]  151 	ld	h,-1 (ix)
+   006B 7E            [ 7]  152 	ld	a,(hl)
+   006C FD 21r04r00   [14]  153 	ld	iy,#_y
+   0070 FD 77 00      [19]  154 	ld	0 (iy),a
+   0073 23            [ 6]  155 	inc	hl
+   0074 7E            [ 7]  156 	ld	a,(hl)
+   0075 FD 21r04r00   [14]  157 	ld	iy,#_y
+   0079 FD 77 01      [19]  158 	ld	1 (iy),a
+   007C 23            [ 6]  159 	inc	hl
+   007D 7E            [ 7]  160 	ld	a,(hl)
+   007E FD 21r04r00   [14]  161 	ld	iy,#_y
+   0082 FD 77 02      [19]  162 	ld	2 (iy),a
+   0085 23            [ 6]  163 	inc	hl
+   0086 7E            [ 7]  164 	ld	a,(hl)
+   0087 32r07r00      [13]  165 	ld	(#_y + 3),a
+   008A 7A            [ 4]  166 	ld	a,d
+   008B C6 08         [ 7]  167 	add	a, #0x08
+   008D 6F            [ 4]  168 	ld	l,a
+   008E 17            [ 4]  169 	rla
+   008F 9F            [ 4]  170 	sbc	a, a
+   0090 67            [ 4]  171 	ld	h,a
+   0091 29            [11]  172 	add	hl, hl
+   0092 29            [11]  173 	add	hl, hl
+   0093 3Er11         [ 7]  174 	ld	a,#<(_state)
+   0095 85            [ 4]  175 	add	a, l
+   0096 DD 77 FC      [19]  176 	ld	-4 (ix),a
+   0099 3Es00         [ 7]  177 	ld	a,#>(_state)
+   009B 8C            [ 4]  178 	adc	a, h
+   009C DD 77 FD      [19]  179 	ld	-3 (ix),a
+   009F DD 6E FC      [19]  180 	ld	l,-4 (ix)
+   00A2 DD 66 FD      [19]  181 	ld	h,-3 (ix)
+   00A5 7E            [ 7]  182 	ld	a,(hl)
+   00A6 FD 21r08r00   [14]  183 	ld	iy,#_z
+   00AA FD 77 00      [19]  184 	ld	0 (iy),a
+   00AD 23            [ 6]  185 	inc	hl
+   00AE 7E            [ 7]  186 	ld	a,(hl)
+   00AF FD 21r08r00   [14]  187 	ld	iy,#_z
+   00B3 FD 77 01      [19]  188 	ld	1 (iy),a
+   00B6 23            [ 6]  189 	inc	hl
+   00B7 7E            [ 7]  190 	ld	a,(hl)
+   00B8 FD 21r08r00   [14]  191 	ld	iy,#_z
+   00BC FD 77 02      [19]  192 	ld	2 (iy),a
+   00BF 23            [ 6]  193 	inc	hl
+   00C0 7E            [ 7]  194 	ld	a,(hl)
+   00C1 32r0Br00      [13]  195 	ld	(#_z + 3),a
+                            196 ;gimli-permutation.c:32: spbox_x();
+   00C4 C5            [11]  197 	push	bc
+   00C5 D5            [11]  198 	push	de
+   00C6 CDr59r03      [17]  199 	call	_spbox_x
+   00C9 CDr1Er04      [17]  200 	call	_spbox_y
+   00CC CDr93r04      [17]  201 	call	_spbox_z
+   00CF D1            [10]  202 	pop	de
+   00D0 C1            [10]  203 	pop	bc
+                            204 ;gimli-permutation.c:40: state[col] = z; state[col+4] = y; state[col+8] = x;
+   00D1 3Ar08r00      [13]  205 	ld	a,(#_z + 0)
+   00D4 02            [ 7]  206 	ld	(bc),a
+   00D5 03            [ 6]  207 	inc	bc
+   00D6 3Ar09r00      [13]  208 	ld	a,(#_z + 1)
+   00D9 02            [ 7]  209 	ld	(bc),a
+   00DA 03            [ 6]  210 	inc	bc
+   00DB 3Ar0Ar00      [13]  211 	ld	a,(#_z + 2)
+   00DE 02            [ 7]  212 	ld	(bc),a
+   00DF 03            [ 6]  213 	inc	bc
+   00E0 3Ar0Br00      [13]  214 	ld	a,(#_z + 3)
+   00E3 02            [ 7]  215 	ld	(bc),a
+   00E4 DD 6E FE      [19]  216 	ld	l,-2 (ix)
+   00E7 DD 66 FF      [19]  217 	ld	h,-1 (ix)
+   00EA 3Ar04r00      [13]  218 	ld	a,(#_y + 0)
+   00ED 77            [ 7]  219 	ld	(hl),a
+   00EE 23            [ 6]  220 	inc	hl
+   00EF 3Ar05r00      [13]  221 	ld	a,(#_y + 1)
+   00F2 77            [ 7]  222 	ld	(hl),a
+   00F3 23            [ 6]  223 	inc	hl
+   00F4 3Ar06r00      [13]  224 	ld	a,(#_y + 2)
+   00F7 77            [ 7]  225 	ld	(hl),a
+   00F8 23            [ 6]  226 	inc	hl
+   00F9 3Ar07r00      [13]  227 	ld	a,(#_y + 3)
+   00FC 77            [ 7]  228 	ld	(hl),a
+   00FD DD 6E FC      [19]  229 	ld	l,-4 (ix)
+   0100 DD 66 FD      [19]  230 	ld	h,-3 (ix)
+   0103 3Ar00r00      [13]  231 	ld	a,(#_x + 0)
+   0106 77            [ 7]  232 	ld	(hl),a
+   0107 23            [ 6]  233 	inc	hl
+   0108 3Ar01r00      [13]  234 	ld	a,(#_x + 1)
+   010B 77            [ 7]  235 	ld	(hl),a
+   010C 23            [ 6]  236 	inc	hl
+   010D 3Ar02r00      [13]  237 	ld	a,(#_x + 2)
+   0110 77            [ 7]  238 	ld	(hl),a
+   0111 23            [ 6]  239 	inc	hl
+   0112 FD 21r00r00   [14]  240 	ld	iy,#_x
+   0116 FD 7E 03      [19]  241 	ld	a,3 (iy)
+   0119 77            [ 7]  242 	ld	(hl),a
+                            243 ;gimli-permutation.c:24: for( col=0; col<4; col++ ){
+   011A 14            [ 4]  244 	inc	d
+   011B 7A            [ 4]  245 	ld	a,d
+   011C EE 80         [ 7]  246 	xor	a, #0x80
+   011E D6 84         [ 7]  247 	sub	a, #0x84
+   0120 DAr13r00      [10]  248 	jp	C,00109$
+                            249 ;gimli-permutation.c:43: if( 0 == (round&3) ){
+   0123 DD 7E F6      [19]  250 	ld	a,-10 (ix)
+   0126 E6 03         [ 7]  251 	and	a, #0x03
+   0128 DD 77 FC      [19]  252 	ld	-4 (ix),a
+                            253 ;gimli-permutation.c:44: x = state[0]; state[0] = state[1]; state[1] = x;
+                            254 ;gimli-permutation.c:45: x = state[2]; state[2] = state[3]; state[3] = x;
+                            255 ;gimli-permutation.c:43: if( 0 == (round&3) ){
+   012B DD 36 FD 00   [19]  256 	ld	-3 (ix), #0x00
+   012F 3E 00         [ 7]  257 	ld	a, #0x00
+   0131 DD B6 FC      [19]  258 	or	a,-4 (ix)
+   0134 C2rD8r01      [10]  259 	jp	NZ,00103$
+                            260 ;gimli-permutation.c:44: x = state[0]; state[0] = state[1]; state[1] = x;
+   0137 21r11r00      [10]  261 	ld	hl, #_state + 0
+   013A 7E            [ 7]  262 	ld	a,(hl)
+   013B FD 21r00r00   [14]  263 	ld	iy,#_x
+   013F FD 77 00      [19]  264 	ld	0 (iy),a
+   0142 23            [ 6]  265 	inc	hl
+   0143 7E            [ 7]  266 	ld	a,(hl)
+   0144 FD 21r00r00   [14]  267 	ld	iy,#_x
+   0148 FD 77 01      [19]  268 	ld	1 (iy),a
+   014B 23            [ 6]  269 	inc	hl
+   014C 7E            [ 7]  270 	ld	a,(hl)
+   014D FD 21r00r00   [14]  271 	ld	iy,#_x
+   0151 FD 77 02      [19]  272 	ld	2 (iy),a
+   0154 23            [ 6]  273 	inc	hl
+   0155 7E            [ 7]  274 	ld	a,(hl)
+   0156 FD 21r00r00   [14]  275 	ld	iy,#_x
+   015A FD 77 03      [19]  276 	ld	3 (iy),a
+   015D 11r15r00      [10]  277 	ld	de,#(_state + 0x0004)
+   0160 21 02 00      [10]  278 	ld	hl, #0x0002
+   0163 39            [11]  279 	add	hl, sp
+   0164 EB            [ 4]  280 	ex	de, hl
+   0165 01 04 00      [10]  281 	ld	bc, #0x0004
+   0168 ED B0         [21]  282 	ldir
+   016A 11r11r00      [10]  283 	ld	de,#_state
+   016D 21 02 00      [10]  284 	ld	hl, #0x0002
+   0170 39            [11]  285 	add	hl, sp
+   0171 01 04 00      [10]  286 	ld	bc, #0x0004
+   0174 ED B0         [21]  287 	ldir
+   0176 21r15r00      [10]  288 	ld	hl,#(_state + 0x0004)
+   0179 3Ar00r00      [13]  289 	ld	a,(#_x + 0)
+   017C 77            [ 7]  290 	ld	(hl),a
+   017D 23            [ 6]  291 	inc	hl
+   017E 3Ar01r00      [13]  292 	ld	a,(#_x + 1)
+   0181 77            [ 7]  293 	ld	(hl),a
+   0182 23            [ 6]  294 	inc	hl
+   0183 3Ar02r00      [13]  295 	ld	a,(#_x + 2)
+   0186 77            [ 7]  296 	ld	(hl),a
+   0187 23            [ 6]  297 	inc	hl
+   0188 3Ar03r00      [13]  298 	ld	a,(#_x + 3)
+   018B 77            [ 7]  299 	ld	(hl),a
+                            300 ;gimli-permutation.c:45: x = state[2]; state[2] = state[3]; state[3] = x;
+   018C 21r19r00      [10]  301 	ld	hl, #(_state + 0x0008) + 0
+   018F 7E            [ 7]  302 	ld	a,(hl)
+   0190 FD 21r00r00   [14]  303 	ld	iy,#_x
+   0194 FD 77 00      [19]  304 	ld	0 (iy),a
+   0197 23            [ 6]  305 	inc	hl
+   0198 7E            [ 7]  306 	ld	a,(hl)
+   0199 FD 21r00r00   [14]  307 	ld	iy,#_x
+   019D FD 77 01      [19]  308 	ld	1 (iy),a
+   01A0 23            [ 6]  309 	inc	hl
+   01A1 7E            [ 7]  310 	ld	a,(hl)
+   01A2 FD 21r00r00   [14]  311 	ld	iy,#_x
+   01A6 FD 77 02      [19]  312 	ld	2 (iy),a
+   01A9 23            [ 6]  313 	inc	hl
+   01AA 7E            [ 7]  314 	ld	a,(hl)
+   01AB 32r03r00      [13]  315 	ld	(#_x + 3),a
+   01AE ED 5Br1Dr00   [20]  316 	ld	de, (#(_state + 0x000c) + 0)
+   01B2 ED 4Br1Fr00   [20]  317 	ld	bc, (#(_state + 0x000c) + 2)
+   01B6 ED 53r19r00   [20]  318 	ld	((_state + 0x0008)), de
+   01BA ED 43r1Br00   [20]  319 	ld	((_state + 0x0008) + 2), bc
+   01BE 21r1Dr00      [10]  320 	ld	hl,#(_state + 0x000c)
+   01C1 3Ar00r00      [13]  321 	ld	a,(#_x + 0)
+   01C4 77            [ 7]  322 	ld	(hl),a
+   01C5 23            [ 6]  323 	inc	hl
+   01C6 3Ar01r00      [13]  324 	ld	a,(#_x + 1)
+   01C9 77            [ 7]  325 	ld	(hl),a
+   01CA 23            [ 6]  326 	inc	hl
+   01CB 3Ar02r00      [13]  327 	ld	a,(#_x + 2)
+   01CE 77            [ 7]  328 	ld	(hl),a
+   01CF 23            [ 6]  329 	inc	hl
+   01D0 FD 21r00r00   [14]  330 	ld	iy,#_x
+   01D4 FD 7E 03      [19]  331 	ld	a,3 (iy)
+   01D7 77            [ 7]  332 	ld	(hl),a
+   01D8                     333 00103$:
+                            334 ;gimli-permutation.c:48: if( 2 == (round&3) ){
+   01D8 DD 7E FC      [19]  335 	ld	a,-4 (ix)
+   01DB D6 02         [ 7]  336 	sub	a, #0x02
+   01DD C2r7Br02      [10]  337 	jp	NZ,00105$
+   01E0 DD 7E FD      [19]  338 	ld	a,-3 (ix)
+   01E3 B7            [ 4]  339 	or	a, a
+   01E4 C2r7Br02      [10]  340 	jp	NZ,00105$
+                            341 ;gimli-permutation.c:49: x = state[0]; state[0] = state[2]; state[2] = x;
+   01E7 21r11r00      [10]  342 	ld	hl, #_state + 0
+   01EA 7E            [ 7]  343 	ld	a,(hl)
+   01EB FD 21r00r00   [14]  344 	ld	iy,#_x
+   01EF FD 77 00      [19]  345 	ld	0 (iy),a
+   01F2 23            [ 6]  346 	inc	hl
+   01F3 7E            [ 7]  347 	ld	a,(hl)
+   01F4 FD 21r00r00   [14]  348 	ld	iy,#_x
+   01F8 FD 77 01      [19]  349 	ld	1 (iy),a
+   01FB 23            [ 6]  350 	inc	hl
+   01FC 7E            [ 7]  351 	ld	a,(hl)
+   01FD FD 21r00r00   [14]  352 	ld	iy,#_x
+   0201 FD 77 02      [19]  353 	ld	2 (iy),a
+   0204 23            [ 6]  354 	inc	hl
+   0205 7E            [ 7]  355 	ld	a,(hl)
+   0206 32r03r00      [13]  356 	ld	(#_x + 3),a
+   0209 ED 5Br19r00   [20]  357 	ld	de, (#(_state + 0x0008) + 0)
+   020D ED 4Br1Br00   [20]  358 	ld	bc, (#(_state + 0x0008) + 2)
+   0211 ED 53r11r00   [20]  359 	ld	(_state), de
+   0215 ED 43r13r00   [20]  360 	ld	(_state + 2), bc
+   0219 21r19r00      [10]  361 	ld	hl,#(_state + 0x0008)
+   021C 3Ar00r00      [13]  362 	ld	a,(#_x + 0)
+   021F 77            [ 7]  363 	ld	(hl),a
+   0220 23            [ 6]  364 	inc	hl
+   0221 3Ar01r00      [13]  365 	ld	a,(#_x + 1)
+   0224 77            [ 7]  366 	ld	(hl),a
+   0225 23            [ 6]  367 	inc	hl
+   0226 3Ar02r00      [13]  368 	ld	a,(#_x + 2)
+   0229 77            [ 7]  369 	ld	(hl),a
+   022A 23            [ 6]  370 	inc	hl
+   022B 3Ar03r00      [13]  371 	ld	a,(#_x + 3)
+   022E 77            [ 7]  372 	ld	(hl),a
+                            373 ;gimli-permutation.c:50: x = state[1]; state[1] = state[3]; state[3] = x;
+   022F 21r15r00      [10]  374 	ld	hl, #(_state + 0x0004) + 0
+   0232 7E            [ 7]  375 	ld	a,(hl)
+   0233 FD 21r00r00   [14]  376 	ld	iy,#_x
+   0237 FD 77 00      [19]  377 	ld	0 (iy),a
+   023A 23            [ 6]  378 	inc	hl
+   023B 7E            [ 7]  379 	ld	a,(hl)
+   023C FD 21r00r00   [14]  380 	ld	iy,#_x
+   0240 FD 77 01      [19]  381 	ld	1 (iy),a
+   0243 23            [ 6]  382 	inc	hl
+   0244 7E            [ 7]  383 	ld	a,(hl)
+   0245 FD 21r00r00   [14]  384 	ld	iy,#_x
+   0249 FD 77 02      [19]  385 	ld	2 (iy),a
+   024C 23            [ 6]  386 	inc	hl
+   024D 7E            [ 7]  387 	ld	a,(hl)
+   024E 32r03r00      [13]  388 	ld	(#_x + 3),a
+   0251 ED 5Br1Dr00   [20]  389 	ld	de, (#(_state + 0x000c) + 0)
+   0255 ED 4Br1Fr00   [20]  390 	ld	bc, (#(_state + 0x000c) + 2)
+   0259 ED 53r15r00   [20]  391 	ld	((_state + 0x0004)), de
+   025D ED 43r17r00   [20]  392 	ld	((_state + 0x0004) + 2), bc
+   0261 21r1Dr00      [10]  393 	ld	hl,#(_state + 0x000c)
+   0264 3Ar00r00      [13]  394 	ld	a,(#_x + 0)
+   0267 77            [ 7]  395 	ld	(hl),a
+   0268 23            [ 6]  396 	inc	hl
+   0269 3Ar01r00      [13]  397 	ld	a,(#_x + 1)
+   026C 77            [ 7]  398 	ld	(hl),a
+   026D 23            [ 6]  399 	inc	hl
+   026E 3Ar02r00      [13]  400 	ld	a,(#_x + 2)
+   0271 77            [ 7]  401 	ld	(hl),a
+   0272 23            [ 6]  402 	inc	hl
+   0273 FD 21r00r00   [14]  403 	ld	iy,#_x
+   0277 FD 7E 03      [19]  404 	ld	a,3 (iy)
+   027A 77            [ 7]  405 	ld	(hl),a
+   027B                     406 00105$:
+                            407 ;gimli-permutation.c:53: if( 0 == (round&3) ){
+   027B DD 7E FD      [19]  408 	ld	a,-3 (ix)
+   027E DD B6 FC      [19]  409 	or	a,-4 (ix)
+   0281 20 4E         [12]  410 	jr	NZ,00112$
+                            411 ;gimli-permutation.c:54: state[0] = state[0] ^ ((unsigned long) 0x9e377900 | (unsigned long)round);
+   0283 11r11r00      [10]  412 	ld	de,#_state
+   0286 21 02 00      [10]  413 	ld	hl, #0x0002
+   0289 39            [11]  414 	add	hl, sp
+   028A EB            [ 4]  415 	ex	de, hl
+   028B 01 04 00      [10]  416 	ld	bc, #0x0004
+   028E ED B0         [21]  417 	ldir
+   0290 DD 5E F6      [19]  418 	ld	e,-10 (ix)
+   0293 DD 56 F7      [19]  419 	ld	d,-9 (ix)
+   0296 DD 7E F7      [19]  420 	ld	a,-9 (ix)
+   0299 17            [ 4]  421 	rla
+   029A 9F            [ 4]  422 	sbc	a, a
+   029B 6F            [ 4]  423 	ld	l,a
+   029C 47            [ 4]  424 	ld	b,a
+   029D 7A            [ 4]  425 	ld	a,d
+   029E F6 79         [ 7]  426 	or	a, #0x79
+   02A0 67            [ 4]  427 	ld	h,a
+   02A1 7D            [ 4]  428 	ld	a,l
+   02A2 F6 37         [ 7]  429 	or	a, #0x37
+   02A4 6F            [ 4]  430 	ld	l,a
+   02A5 78            [ 4]  431 	ld	a,b
+   02A6 F6 9E         [ 7]  432 	or	a, #0x9E
+   02A8 57            [ 4]  433 	ld	d,a
+   02A9 DD 7E F8      [19]  434 	ld	a,-8 (ix)
+   02AC AB            [ 4]  435 	xor	a, e
+   02AD DD 77 F8      [19]  436 	ld	-8 (ix),a
+   02B0 DD 7E F9      [19]  437 	ld	a,-7 (ix)
+   02B3 AC            [ 4]  438 	xor	a, h
+   02B4 DD 77 F9      [19]  439 	ld	-7 (ix),a
+   02B7 DD 7E FA      [19]  440 	ld	a,-6 (ix)
+   02BA AD            [ 4]  441 	xor	a, l
+   02BB DD 77 FA      [19]  442 	ld	-6 (ix),a
+   02BE DD 7E FB      [19]  443 	ld	a,-5 (ix)
+   02C1 AA            [ 4]  444 	xor	a, d
+   02C2 DD 77 FB      [19]  445 	ld	-5 (ix),a
+   02C5 11r11r00      [10]  446 	ld	de,#_state
+   02C8 21 02 00      [10]  447 	ld	hl, #0x0002
+   02CB 39            [11]  448 	add	hl, sp
+   02CC 01 04 00      [10]  449 	ld	bc, #0x0004
+   02CF ED B0         [21]  450 	ldir
+   02D1                     451 00112$:
+                            452 ;gimli-permutation.c:23: for( round=24; round > 0; round-- ){
+   02D1 E1            [10]  453 	pop	hl
+   02D2 E5            [11]  454 	push	hl
+   02D3 2B            [ 6]  455 	dec	hl
+   02D4 E3            [19]  456 	ex	(sp), hl
+   02D5 AF            [ 4]  457 	xor	a, a
+   02D6 DD BE F6      [19]  458 	cp	a, -10 (ix)
+   02D9 DD 9E F7      [19]  459 	sbc	a, -9 (ix)
+   02DC E2rE1r02      [10]  460 	jp	PO, 00140$
+   02DF EE 80         [ 7]  461 	xor	a, #0x80
+   02E1                     462 00140$:
+   02E1 FAr11r00      [10]  463 	jp	M,00115$
+                            464 ;gimli-permutation.c:68: __endasm;
+   02E4 3E 0D         [ 7]  465 	ld a,#0x0d ; CR
+   02E6 CD 33 00      [17]  466 	call 0x33 ; Print it
+   02E9 21 CC 06      [10]  467 	ld hl,#0x6cc ; BASIC command line
+   02EC E9            [ 4]  468 	jp (hl)
+   02ED DD F9         [10]  469 	ld	sp,ix
+   02EF DD E1         [14]  470 	pop	ix
+   02F1 C9            [10]  471 	ret
+   02F2                     472 _main_end::
+                            473 ;gimli-permutation.c:72: void spbox_zerocy(){
+                            474 ;	---------------------------------
+                            475 ; Function spbox_zerocy
+                            476 ; ---------------------------------
+   02F2                     477 _spbox_zerocy_start::
+   02F2                     478 _spbox_zerocy:
+                            479 ;gimli-permutation.c:73: cy = 0;
+   02F2 21r00r00      [10]  480 	ld	hl,#_cy + 0
+   02F5 36 00         [10]  481 	ld	(hl), #0x00
+   02F7 C9            [10]  482 	ret
+   02F8                     483 _spbox_zerocy_end::
+                            484 ;gimli-permutation.c:78: void spbox_rotate( char col ){
+                            485 ;	---------------------------------
+                            486 ; Function spbox_rotate
+                            487 ; ---------------------------------
+   02F8                     488 _spbox_rotate_start::
+   02F8                     489 _spbox_rotate:
+                            490 ;gimli-permutation.c:105: __endasm;
+   02F8 DD E5         [15]  491 	push ix
+   02FA DD 21 00 00   [14]  492 	ld ix,#0
+   02FE DD 39         [15]  493 	add ix,sp
+   0300 DD 6E 04      [19]  494 	ld l,4 (ix)
+   0303 DD 7E 04      [19]  495 	ld a,4 (ix)
+   0306 17            [ 4]  496 	rla
+   0307 9F            [ 4]  497 	sbc a, a
+   0308 67            [ 4]  498 	ld h,a
+   0309 29            [11]  499 	add hl, hl
+   030A 29            [11]  500 	add hl, hl
+   030B 11r11r00      [10]  501 	ld de,#_state
+   030E 19            [11]  502 	add hl,de
+   030F 5D            [ 4]  503 	ld e, l
+   0310 54            [ 4]  504 	ld d, h
+   0311 1A            [ 7]  505 	ld a,(de)
+   0312 D5            [11]  506 	push de
+   0313 E1            [10]  507 	pop hl
+   0314 23            [ 6]  508 	inc hl
+   0315 0E 03         [ 7]  509 	ld c,#0x03
+   0317 06 00         [ 7]  510 	ld b,#0x00
+   0319 ED B0         [21]  511 	ldir
+   031B 12            [ 7]  512 	ld (de),a;
+                            513 ;gimli-permutation.c:144: __endasm;
+   031C DD 6E 04      [19]  514 	ld l,4 (ix)
+   031F DD 7E 04      [19]  515 	ld a,4 (ix)
+   0322 17            [ 4]  516 	rla
+   0323 9F            [ 4]  517 	sbc a, a
+   0324 67            [ 4]  518 	ld h,a
+   0325 29            [11]  519 	add hl, hl
+   0326 29            [11]  520 	add hl, hl
+   0327 11r11r00      [10]  521 	ld de,#_state
+   032A 19            [11]  522 	add hl,de
+   032B 01 10 00      [10]  523 	ld bc, #0x10
+   032E 09            [11]  524 	add hl,bc
+   032F 5D            [ 4]  525 	ld e, l
+   0330 54            [ 4]  526 	ld d, h
+   0331 13            [ 6]  527 	inc de
+   0332 13            [ 6]  528 	inc de
+   0333 D5            [11]  529 	push de
+   0334 E1            [10]  530 	pop hl
+   0335 13            [ 6]  531 	inc de
+   0336 1A            [ 7]  532 	ld a,(de)
+   0337 0E 03         [ 7]  533 	ld c,#0x03
+   0339 06 00         [ 7]  534 	ld b,#0x00
+   033B ED B8         [21]  535 	lddr
+   033D 12            [ 7]  536 	ld (de), a
+   033E D5            [11]  537 	push de
+   033F FD E1         [14]  538 	pop iy
+   0341 FD 7E 03      [19]  539 	ld a,3 (iy)
+   0344 CB 17         [ 8]  540 	rl a
+   0346 FD CB 00 16   [23]  541 	rl 0 (iy)
+   034A FD CB 01 16   [23]  542 	rl 1 (iy)
+   034E FD CB 02 16   [23]  543 	rl 2 (iy)
+   0352 FD CB 03 16   [23]  544 	rl 3 (iy)
+   0356 DD E1         [14]  545 	pop ix
+                            546 ;gimli-permutation.c:145: return;
+   0358 C9            [10]  547 	ret
+   0359                     548 _spbox_rotate_end::
+                            549 ;gimli-spboxx.c:11: void spbox_x(){
+                            550 ;	---------------------------------
+                            551 ; Function spbox_x
+                            552 ; ---------------------------------
+   0359                     553 _spbox_x_start::
+   0359                     554 _spbox_x:
+                            555 ;gimli-spboxx.c:135: __endasm;
+   0359 FD 21r00r00   [14]  556 	ld iy,#_cy
+   035D 1E 00         [ 7]  557 	ld e,#0x0
+   035F 16 00         [ 7]  558 	ld d,#0x0
+                            559 ;
+   0361 21r00r00      [10]  560 	ld hl,#_x+0
+   0364 4E            [ 7]  561 	ld c,(hl)
+   0365 21r0Cr00      [10]  562 	ld hl,#_u+0
+   0368 71            [ 7]  563 	ld (hl),c
+                            564 ;
+   0369 21r08r00      [10]  565 	ld hl,#_z+0
+   036C 46            [ 7]  566 	ld b,(hl)
+   036D 78            [ 4]  567 	ld a,b
+   036E CB 20         [ 8]  568 	sla b
+   0370 FD CB 00 16   [23]  569 	rl 0 (iy)
+   0374 21r10r00      [10]  570 	ld hl,#_v+0
+   0377 70            [ 7]  571 	ld (hl),b
+                            572 ;
+   0378 21r04r00      [10]  573 	ld hl,#_y+0
+   037B A6            [ 7]  574 	and (hl)
+                            575 ;
+   037C CB 27         [ 8]  576 	sla a
+   037E CB 12         [ 8]  577 	rl d
+   0380 CB 27         [ 8]  578 	sla a
+   0382 CB 13         [ 8]  579 	rl e
+                            580 ;
+   0384 A8            [ 4]  581 	xor b
+   0385 A9            [ 4]  582 	xor c
+                            583 ;
+   0386 21r00r00      [10]  584 	ld hl,#_x+0
+   0389 77            [ 7]  585 	ld (hl),a
+   038A 21r01r00      [10]  586 	ld hl,#_x+1
+   038D 4E            [ 7]  587 	ld c,(hl)
+   038E 21r0Dr00      [10]  588 	ld hl,#_u+1
+   0391 71            [ 7]  589 	ld (hl),c
+                            590 ;
+   0392 21r09r00      [10]  591 	ld hl,#_z+1
+   0395 46            [ 7]  592 	ld b,(hl)
+   0396 78            [ 4]  593 	ld a,b
+   0397 FD CB 00 1E   [23]  594 	rr 0(iy)
+   039B CB 10         [ 8]  595 	rl b
+   039D FD CB 00 16   [23]  596 	rl 0 (iy)
+   03A1 21r11r00      [10]  597 	ld hl,#_v+1
+   03A4 70            [ 7]  598 	ld (hl),b
+                            599 ;
+   03A5 21r05r00      [10]  600 	ld hl,#_y+1
+   03A8 A6            [ 7]  601 	and (hl)
+                            602 ;
+   03A9 CB 1A         [ 8]  603 	rr d
+   03AB CB 17         [ 8]  604 	rl a
+   03AD CB 12         [ 8]  605 	rl d
+   03AF CB 1B         [ 8]  606 	rr e
+   03B1 CB 17         [ 8]  607 	rl a
+   03B3 CB 13         [ 8]  608 	rl e
+                            609 ;
+   03B5 A8            [ 4]  610 	xor b
+   03B6 A9            [ 4]  611 	xor c
+                            612 ;
+   03B7 21r01r00      [10]  613 	ld hl,#_x+1
+   03BA 77            [ 7]  614 	ld (hl),a
+   03BB 21r02r00      [10]  615 	ld hl,#_x+2
+   03BE 4E            [ 7]  616 	ld c,(hl)
+   03BF 21r0Er00      [10]  617 	ld hl,#_u+2
+   03C2 71            [ 7]  618 	ld (hl),c
+                            619 ;
+   03C3 21r0Ar00      [10]  620 	ld hl,#_z+2
+   03C6 46            [ 7]  621 	ld b,(hl)
+   03C7 78            [ 4]  622 	ld a,b
+   03C8 FD CB 00 1E   [23]  623 	rr 0(iy)
+   03CC CB 10         [ 8]  624 	rl b
+   03CE FD CB 00 16   [23]  625 	rl 0 (iy)
+   03D2 21r12r00      [10]  626 	ld hl,#_v+2
+   03D5 70            [ 7]  627 	ld (hl),b
+                            628 ;
+   03D6 21r06r00      [10]  629 	ld hl,#_y+2
+   03D9 A6            [ 7]  630 	and (hl)
+                            631 ;
+   03DA CB 1A         [ 8]  632 	rr d
+   03DC CB 17         [ 8]  633 	rl a
+   03DE CB 12         [ 8]  634 	rl d
+   03E0 CB 1B         [ 8]  635 	rr e
+   03E2 CB 17         [ 8]  636 	rl a
+   03E4 CB 13         [ 8]  637 	rl e
+                            638 ;
+   03E6 A8            [ 4]  639 	xor b
+   03E7 A9            [ 4]  640 	xor c
+                            641 ;
+   03E8 21r02r00      [10]  642 	ld hl,#_x+2
+   03EB 77            [ 7]  643 	ld (hl),a
+   03EC 21r03r00      [10]  644 	ld hl,#_x+3
+   03EF 4E            [ 7]  645 	ld c,(hl)
+   03F0 21r0Fr00      [10]  646 	ld hl,#_u+3
+   03F3 71            [ 7]  647 	ld (hl),c
+                            648 ;
+   03F4 21r0Br00      [10]  649 	ld hl,#_z+3
+   03F7 46            [ 7]  650 	ld b,(hl)
+   03F8 78            [ 4]  651 	ld a,b
+   03F9 FD CB 00 1E   [23]  652 	rr 0(iy)
+   03FD CB 10         [ 8]  653 	rl b
+   03FF FD CB 00 16   [23]  654 	rl 0 (iy)
+   0403 21r13r00      [10]  655 	ld hl,#_v+3
+   0406 70            [ 7]  656 	ld (hl),b
+                            657 ;
+   0407 21r07r00      [10]  658 	ld hl,#_y+3
+   040A A6            [ 7]  659 	and (hl)
+                            660 ;
+   040B CB 1A         [ 8]  661 	rr d
+   040D CB 17         [ 8]  662 	rl a
+   040F CB 12         [ 8]  663 	rl d
+   0411 CB 1B         [ 8]  664 	rr e
+   0413 CB 17         [ 8]  665 	rl a
+   0415 CB 13         [ 8]  666 	rl e
+                            667 ;
+   0417 A8            [ 4]  668 	xor b
+   0418 A9            [ 4]  669 	xor c
+                            670 ;
+   0419 21r03r00      [10]  671 	ld hl,#_x+3
+   041C 77            [ 7]  672 	ld (hl),a
+                            673 ;gimli-spboxx.c:136: return;
+   041D C9            [10]  674 	ret
+   041E                     675 _spbox_x_end::
+                            676 ;gimli-spboxy.c:10: void spbox_y(){
+                            677 ;	---------------------------------
+                            678 ; Function spbox_y
+                            679 ; ---------------------------------
+   041E                     680 _spbox_y_start::
+   041E                     681 _spbox_y:
+                            682 ;gimli-spboxy.c:93: __endasm;
+   041E 16 00         [ 7]  683 	ld d,#0x00
+   0420 21r04r00      [10]  684 	ld hl,#_y+0
+   0423 4E            [ 7]  685 	ld c,(hl)
+   0424 21r10r00      [10]  686 	ld hl,#_v+0
+   0427 71            [ 7]  687 	ld (hl),c
+   0428 21r0Cr00      [10]  688 	ld hl,#_u+0
+   042B 46            [ 7]  689 	ld b,(hl)
+   042C 21r08r00      [10]  690 	ld hl,#_z+0
+   042F 7E            [ 7]  691 	ld a,(hl)
+   0430 B0            [ 4]  692 	or b
+   0431 CB 27         [ 8]  693 	sla a
+   0433 CB 12         [ 8]  694 	rl d
+   0435 A8            [ 4]  695 	xor b
+   0436 A9            [ 4]  696 	xor c
+   0437 21r04r00      [10]  697 	ld hl,#_y+0
+   043A 77            [ 7]  698 	ld (hl),a
+   043B 21r05r00      [10]  699 	ld hl,#_y+1
+   043E 4E            [ 7]  700 	ld c,(hl)
+   043F 21r11r00      [10]  701 	ld hl,#_v+1
+   0442 71            [ 7]  702 	ld (hl),c
+   0443 21r0Dr00      [10]  703 	ld hl,#_u+1
+   0446 46            [ 7]  704 	ld b,(hl)
+   0447 21r09r00      [10]  705 	ld hl,#_z+1
+   044A 7E            [ 7]  706 	ld a,(hl)
+   044B B0            [ 4]  707 	or b
+   044C CB 1A         [ 8]  708 	rr d
+   044E CB 17         [ 8]  709 	rl a
+   0450 CB 12         [ 8]  710 	rl d
+   0452 A8            [ 4]  711 	xor b
+   0453 A9            [ 4]  712 	xor c
+   0454 21r05r00      [10]  713 	ld hl,#_y+1
+   0457 77            [ 7]  714 	ld (hl),a
+   0458 21r06r00      [10]  715 	ld hl,#_y+2
+   045B 4E            [ 7]  716 	ld c,(hl)
+   045C 21r12r00      [10]  717 	ld hl,#_v+2
+   045F 71            [ 7]  718 	ld (hl),c
+   0460 21r0Er00      [10]  719 	ld hl,#_u+2
+   0463 46            [ 7]  720 	ld b,(hl)
+   0464 21r0Ar00      [10]  721 	ld hl,#_z+2
+   0467 7E            [ 7]  722 	ld a,(hl)
+   0468 B0            [ 4]  723 	or b
+   0469 CB 1A         [ 8]  724 	rr d
+   046B CB 17         [ 8]  725 	rl a
+   046D CB 12         [ 8]  726 	rl d
+   046F A8            [ 4]  727 	xor b
+   0470 A9            [ 4]  728 	xor c
+   0471 21r06r00      [10]  729 	ld hl,#_y+2
+   0474 77            [ 7]  730 	ld (hl),a
+   0475 21r07r00      [10]  731 	ld hl,#_y+3
+   0478 4E            [ 7]  732 	ld c,(hl)
+   0479 21r13r00      [10]  733 	ld hl,#_v+3
+   047C 71            [ 7]  734 	ld (hl),c
+   047D 21r0Fr00      [10]  735 	ld hl,#_u+3
+   0480 46            [ 7]  736 	ld b,(hl)
+   0481 21r0Br00      [10]  737 	ld hl,#_z+3
+   0484 7E            [ 7]  738 	ld a,(hl)
+   0485 B0            [ 4]  739 	or b
+   0486 CB 1A         [ 8]  740 	rr d
+   0488 CB 17         [ 8]  741 	rl a
+   048A CB 12         [ 8]  742 	rl d
+   048C A8            [ 4]  743 	xor b
+   048D A9            [ 4]  744 	xor c
+   048E 21r07r00      [10]  745 	ld hl,#_y+3
+   0491 77            [ 7]  746 	ld (hl),a
+                            747 ;gimli-spboxy.c:94: return;
+   0492 C9            [10]  748 	ret
+   0493                     749 _spbox_y_end::
+                            750 ;gimli-spboxz.c:10: void spbox_z(){
+                            751 ;	---------------------------------
+                            752 ; Function spbox_z
+                            753 ; ---------------------------------
+   0493                     754 _spbox_z_start::
+   0493                     755 _spbox_z:
+                            756 ;gimli-spboxz.c:95: __endasm;
+   0493 21r00r00      [10]  757 	ld hl,#_cy
+   0496 3E 00         [ 7]  758 	ld a,#0x00
+   0498 77            [ 7]  759 	ld (hl),a
+   0499 57            [ 4]  760 	ld d, a
+   049A 5F            [ 4]  761 	ld e, a
+   049B 21r0Cr00      [10]  762 	ld hl,#_u+0
+   049E 7E            [ 7]  763 	ld a,(hl)
+   049F 21r10r00      [10]  764 	ld hl,#_v+0
+   04A2 46            [ 7]  765 	ld b,(hl)
+   04A3 A0            [ 4]  766 	and b
+   04A4 21r00r00      [10]  767 	ld hl,#_cy
+   04A7 CB 27         [ 8]  768 	sla a
+   04A9 CB 16         [15]  769 	rl (hl)
+   04AB CB 27         [ 8]  770 	sla a
+   04AD CB 12         [ 8]  771 	rl d
+   04AF CB 27         [ 8]  772 	sla a
+   04B1 CB 13         [ 8]  773 	rl e
+   04B3 A8            [ 4]  774 	xor b
+   04B4 21r08r00      [10]  775 	ld hl,#_z+0
+   04B7 AE            [ 7]  776 	xor (hl)
+   04B8 77            [ 7]  777 	ld (hl),a
+   04B9 21r0Dr00      [10]  778 	ld hl,#_u+1
+   04BC 7E            [ 7]  779 	ld a,(hl)
+   04BD 21r11r00      [10]  780 	ld hl,#_v+1
+   04C0 46            [ 7]  781 	ld b,(hl)
+   04C1 A0            [ 4]  782 	and b
+   04C2 21r00r00      [10]  783 	ld hl,#_cy
+   04C5 CB 1E         [15]  784 	rr (hl)
+   04C7 CB 17         [ 8]  785 	rl a
+   04C9 CB 16         [15]  786 	rl (hl)
+   04CB CB 1A         [ 8]  787 	rr d
+   04CD CB 17         [ 8]  788 	rl a
+   04CF CB 12         [ 8]  789 	rl d
+   04D1 CB 1B         [ 8]  790 	rr e
+   04D3 CB 17         [ 8]  791 	rl a
+   04D5 CB 13         [ 8]  792 	rl e
+   04D7 A8            [ 4]  793 	xor b
+   04D8 21r09r00      [10]  794 	ld hl,#_z+1
+   04DB AE            [ 7]  795 	xor (hl)
+   04DC 77            [ 7]  796 	ld (hl),a
+   04DD 21r0Er00      [10]  797 	ld hl,#_u+2
+   04E0 7E            [ 7]  798 	ld a,(hl)
+   04E1 21r12r00      [10]  799 	ld hl,#_v+2
+   04E4 46            [ 7]  800 	ld b,(hl)
+   04E5 A0            [ 4]  801 	and b
+   04E6 21r00r00      [10]  802 	ld hl,#_cy
+   04E9 CB 1E         [15]  803 	rr (hl)
+   04EB CB 17         [ 8]  804 	rl a
+   04ED CB 16         [15]  805 	rl (hl)
+   04EF CB 1A         [ 8]  806 	rr d
+   04F1 CB 17         [ 8]  807 	rl a
+   04F3 CB 12         [ 8]  808 	rl d
+   04F5 CB 1B         [ 8]  809 	rr e
+   04F7 CB 17         [ 8]  810 	rl a
+   04F9 CB 13         [ 8]  811 	rl e
+   04FB A8            [ 4]  812 	xor b
+   04FC 21r0Ar00      [10]  813 	ld hl,#_z+2
+   04FF AE            [ 7]  814 	xor (hl)
+   0500 77            [ 7]  815 	ld (hl),a
+   0501 21r0Fr00      [10]  816 	ld hl,#_u+3
+   0504 7E            [ 7]  817 	ld a,(hl)
+   0505 21r13r00      [10]  818 	ld hl,#_v+3
+   0508 46            [ 7]  819 	ld b,(hl)
+   0509 A0            [ 4]  820 	and b
+   050A 21r00r00      [10]  821 	ld hl,#_cy
+   050D CB 1E         [15]  822 	rr (hl)
+   050F CB 17         [ 8]  823 	rl a
+   0511 CB 16         [15]  824 	rl (hl)
+   0513 CB 1A         [ 8]  825 	rr d
+   0515 CB 17         [ 8]  826 	rl a
+   0517 CB 12         [ 8]  827 	rl d
+   0519 CB 1B         [ 8]  828 	rr e
+   051B CB 17         [ 8]  829 	rl a
+   051D CB 13         [ 8]  830 	rl e
+   051F A8            [ 4]  831 	xor b
+   0520 21r0Br00      [10]  832 	ld hl,#_z+3
+   0523 AE            [ 7]  833 	xor (hl)
+   0524 77            [ 7]  834 	ld (hl),a
+   0525 C9            [10]  835 	ret
+   0526                     836 _spbox_z_end::
+                            837 	.area _CODE
+                            838 	.area _INITIALIZER
+   0000                     839 __xinit__cy:
+   0000 00                  840 	.db #0x00	;  0
+   0001                     841 __xinit__hex:
+   0001 00                  842 	.db #0x00	;  0
+   0002 00                  843 	.db 0x00
+   0003 00                  844 	.db 0x00
+   0004 00                  845 	.db 0x00
+   0005 00                  846 	.db 0x00
+   0006 00                  847 	.db 0x00
+   0007 00                  848 	.db 0x00
+   0008 00                  849 	.db 0x00
+   0009 00                  850 	.db 0x00
+   000A 00                  851 	.db 0x00
+   000B 00                  852 	.db 0x00
+   000C 00                  853 	.db 0x00
+   000D 00                  854 	.db 0x00
+   000E 00                  855 	.db 0x00
+   000F 00                  856 	.db 0x00
+   0010 00                  857 	.db 0x00
+   0011                     858 __xinit__state:
+   0011 00 00 00 00         859 	.byte #0x00,#0x00,#0x00,#0x00	; 0
+   0015 00                  860 	.db 0x00
+   0016 00                  861 	.db 0x00
+   0017 00                  862 	.db 0x00
+   0018 00                  863 	.db 0x00
+   0019 00                  864 	.db 0x00
+   001A 00                  865 	.db 0x00
+   001B 00                  866 	.db 0x00
+   001C 00                  867 	.db 0x00
+   001D 00                  868 	.db 0x00
+   001E 00                  869 	.db 0x00
+   001F 00                  870 	.db 0x00
+   0020 00                  871 	.db 0x00
+   0021 00                  872 	.db 0x00
+   0022 00                  873 	.db 0x00
+   0023 00                  874 	.db 0x00
+   0024 00                  875 	.db 0x00
+   0025 00                  876 	.db 0x00
+   0026 00                  877 	.db 0x00
+   0027 00                  878 	.db 0x00
+   0028 00                  879 	.db 0x00
+   0029 00                  880 	.db 0x00
+   002A 00                  881 	.db 0x00
+   002B 00                  882 	.db 0x00
+   002C 00                  883 	.db 0x00
+   002D 00                  884 	.db 0x00
+   002E 00                  885 	.db 0x00
+   002F 00                  886 	.db 0x00
+   0030 00                  887 	.db 0x00
+   0031 00                  888 	.db 0x00
+   0032 00                  889 	.db 0x00
+   0033 00                  890 	.db 0x00
+   0034 00                  891 	.db 0x00
+   0035 00                  892 	.db 0x00
+   0036 00                  893 	.db 0x00
+   0037 00                  894 	.db 0x00
+   0038 00                  895 	.db 0x00
+   0039 00                  896 	.db 0x00
+   003A 00                  897 	.db 0x00
+   003B 00                  898 	.db 0x00
+   003C 00                  899 	.db 0x00
+   003D 00                  900 	.db 0x00
+   003E 00                  901 	.db 0x00
+   003F 00                  902 	.db 0x00
+   0040 00                  903 	.db 0x00
+                            904 	.area _CABS (ABS)
