@@ -1,3 +1,7 @@
+/* Build with: */
+/*   sdcc -mz80 -D_TRS80 --no-std-crt0 --code-loc 0x7704 --data-loc 0x7f9c gimli-permutation.c */
+/*   python ihx2cas.py -n ROTATE -o rotate.cas gimli-permutation.ihx */
+
 #ifndef _TRS80
 #include <stdio.h>
 #endif
@@ -6,7 +10,10 @@ unsigned long x, y, z, u, v;
 /* Carry bytes in SP-box */
 char cy = 0;
 char hexc;
-char hex[16] = {0};
+char hex[16] = { 0x30, 0x31, 0x32, 0x33,
+		 0x34, 0x35, 0x36, 0x37,
+		 0x38, 0x39, 0x41, 0x42,
+		 0x43, 0x44, 0x45, 0x46 };
 unsigned long state[12] = {0};
 
 /* Forward declarations */
@@ -20,6 +27,16 @@ void state_print();
 void main( void ){
   int round;
   char col;
+#ifdef _TRS80
+  hex[0]=0x30; hex[1]=0x31; hex[2]=0x32; hex[3]=0x33;
+  hex[4]=0x34; hex[5]=0x35; hex[6]=0x36; hex[7]=0x37;
+  hex[8]=0x38; hex[9]=0x39; hex[10]=0x41; hex[11]=0x42;
+  hex[12]=0x43; hex[13]=0x44; hex[14]=0x45; hex[15]=0x46;
+
+  for( round=0; round<12; round++ ){
+    state[round] = (unsigned long)0;
+  }
+#endif
   for( round=24; round > 0; round-- ){
     for( col=0; col<4; col++ ){
       /* Zero buffer for carry bits */
@@ -58,7 +75,7 @@ void main( void ){
 #endif
   }
 #ifdef _TRS80
-  /* state_print(); */
+  state_print();
   /* Jump back to BASIC */
   __asm
     ld		a,#0x0d		; CR
@@ -148,6 +165,7 @@ void spbox_rotate( char col ){
 #include "gimli-spboxx.c"
 #include "gimli-spboxy.c"
 #include "gimli-spboxz.c"
+#include "gimli-print.c"
 
 #ifndef _TRS80
 void state_print_org(){
@@ -165,9 +183,9 @@ void state_print_org(){
 }
 
 void state_print(){
-  char row, col, b, c;
+  char row, col, c;
   char *p;
-  int i;
+  int i, b;
   for( i=0; i<10; i++ ){
     hex[i] = i + 48;
   }
@@ -192,4 +210,3 @@ void state_print(){
 }
 #endif
 
-/* #include "gimli-print.c" */
