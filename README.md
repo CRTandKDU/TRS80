@@ -31,6 +31,12 @@ Implementations of several variants of the [Keccak sponge function family](http:
 These implementations, detailed discussion and experimental results are published in the Cryptology ePrint Archive as [TRS-80 with a grain of salt](http://eprint.iacr.org/2013/546).
 
 ### Running GIMLI
+Boot the emulator, or better a real Model 1 16K (BASIC Level II), and answer:
+
+**30467**
+
+to the MEMORY SIZE?  question.
+
 Place the `rotate.cas` cassette file in the tape emulator or in the PlayCAS aplication, then at the `>` prompt on the TRS-80 issue the following commands:
 
     SYSTEM
@@ -41,6 +47,8 @@ and after the machine code is loaded,
     *? /
 
 to start execution of the Gimli permutation on a hard-coded all-null initial state. Refer to the paper for additional usage scenarios.
+
+![Screenshot](https://github.com/CRTandKDU/TRS80/edit/master/rotate-2.png "Result of running Gimli on all-zero state")
 
 ### Running CHACHA
 
