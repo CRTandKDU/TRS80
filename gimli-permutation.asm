@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
-; Version 3.6.0 #9615 (MINGW64)
+; Version 3.6.9 #9995 (MINGW32)
 ;--------------------------------------------------------
 	.module gimli_permutation
 	.optsdcc -mz80
@@ -10,14 +10,13 @@
 ;--------------------------------------------------------
 	.globl _main
 	.globl _state
-	.globl _hex
 	.globl _cy
-	.globl _hexc
 	.globl _v
 	.globl _u
 	.globl _z
 	.globl _y
 	.globl _x
+	.globl _hex
 	.globl _spbox_zerocy
 	.globl _spbox_rotate
 	.globl _spbox_x
@@ -41,16 +40,12 @@ _u::
 	.ds 4
 _v::
 	.ds 4
-_hexc::
-	.ds 1
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _cy::
 	.ds 1
-_hex::
-	.ds 16
 _state::
 	.ds 48
 ;--------------------------------------------------------
@@ -73,7 +68,7 @@ _state::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;gimli-permutation.c:27: void main( void ){
+;gimli-permutation.c:28: void main( void ){
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
@@ -81,159 +76,97 @@ _main::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-	ld	hl,#-9
-	add	hl,sp
-	ld	sp,hl
-;gimli-permutation.c:31: hex[0]=0x30; hex[1]=0x31; hex[2]=0x32; hex[3]=0x33;
-	ld	hl,#_hex
-	ld	(hl),#0x30
-	ld	hl,#(_hex + 0x0001)
-	ld	(hl),#0x31
-	ld	hl,#(_hex + 0x0002)
-	ld	(hl),#0x32
-	ld	hl,#(_hex + 0x0003)
-	ld	(hl),#0x33
-;gimli-permutation.c:32: hex[4]=0x34; hex[5]=0x35; hex[6]=0x36; hex[7]=0x37;
-	ld	hl,#(_hex + 0x0004)
-	ld	(hl),#0x34
-	ld	hl,#(_hex + 0x0005)
-	ld	(hl),#0x35
-	ld	hl,#(_hex + 0x0006)
-	ld	(hl),#0x36
-	ld	hl,#(_hex + 0x0007)
-	ld	(hl),#0x37
-;gimli-permutation.c:33: hex[8]=0x38; hex[9]=0x39; hex[10]=0x41; hex[11]=0x42;
-	ld	hl,#(_hex + 0x0008)
-	ld	(hl),#0x38
-	ld	hl,#(_hex + 0x0009)
-	ld	(hl),#0x39
-	ld	hl,#(_hex + 0x000a)
-	ld	(hl),#0x41
-	ld	hl,#(_hex + 0x000b)
-	ld	(hl),#0x42
-;gimli-permutation.c:34: hex[12]=0x43; hex[13]=0x44; hex[14]=0x45; hex[15]=0x46;
-	ld	hl,#(_hex + 0x000c)
-	ld	(hl),#0x43
-	ld	hl,#(_hex + 0x000d)
-	ld	(hl),#0x44
-	ld	hl,#(_hex + 0x000e)
-	ld	(hl),#0x45
-	ld	hl,#(_hex + 0x000f)
-	ld	(hl),#0x46
-;gimli-permutation.c:36: for( round=0; round<12; round++ ){
-	ld	bc,#0x0000
-00110$:
-;gimli-permutation.c:37: state[round] = (unsigned long)0;
-	ld	l, c
-	ld	h, b
-	add	hl, hl
-	add	hl, hl
-	ld	de,#_state
-	add	hl,de
-	xor	a, a
-	ld	(hl), a
-	inc	hl
-	ld	(hl), a
-	inc	hl
-	xor	a, a
-	ld	(hl), a
-	inc	hl
-	ld	(hl), a
-;gimli-permutation.c:36: for( round=0; round<12; round++ ){
-	inc	bc
-	ld	a,c
-	sub	a, #0x0c
-	ld	a,b
-	rla
-	ccf
-	rra
-	sbc	a, #0x80
-	jr	C,00110$
-;gimli-permutation.c:40: for( round=24; round > 0; round-- ){
-	ld	-8 (ix),#0x18
-	ld	-7 (ix),#0x00
-;gimli-permutation.c:41: for( col=0; col<4; col++ ){
-00120$:
-	ld	-9 (ix),#0x00
-00112$:
-;gimli-permutation.c:43: spbox_zerocy();
+	ld	hl, #-9
+	add	hl, sp
+	ld	sp, hl
+;gimli-permutation.c:41: for( round=24; round > 0; round-- ){
+	ld	-2 (ix), #0x18
+	ld	-1 (ix), #0x00
+;gimli-permutation.c:42: for( col=0; col<4; col++ ){
+00115$:
+	ld	-3 (ix), #0x00
+00109$:
+;gimli-permutation.c:44: spbox_zerocy();
 	call	_spbox_zerocy
-;gimli-permutation.c:45: spbox_rotate( col );
-	ld	a,-9 (ix)
+;gimli-permutation.c:46: spbox_rotate( col );
+	ld	a, -3 (ix)
 	push	af
 	inc	sp
 	call	_spbox_rotate
 	inc	sp
-;gimli-permutation.c:46: x = state[col]; y = state[col+4]; z = state[col+8];
-	ld	l,-9 (ix)
-	ld	h,#0x00
+;gimli-permutation.c:47: x = state[col]; y = state[col+4]; z = state[col+8];
+	ld	l, -3 (ix)
+	ld	h, #0x00
 	add	hl, hl
 	add	hl, hl
 	ld	bc,#_state
 	add	hl,bc
-	ld	e,l
-	ld	d,h
-	ld	a,(hl)
-	ld	iy,#_x
-	ld	0 (iy),a
+	ex	de, hl
+	ld	l, e
+	ld	h, d
+	ld	a, (hl)
+	ld	iy, #_x
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
-	ld	a,-9 (ix)
-	add	a, #0x04
-	ld	l,a
-	ld	h,#0x00
+	ld	a, (hl)
+	ld	3 (iy), a
+	ld	l, -3 (ix)
+	inc	l
+	inc	l
+	inc	l
+	inc	l
+	ld	h, #0x00
 	add	hl, hl
 	add	hl, hl
 	ld	bc,#_state
 	add	hl,bc
 	ld	c,l
 	ld	b,h
-	ld	a,(hl)
-	ld	iy,#_y
-	ld	0 (iy),a
+	ld	a, (hl)
+	ld	iy, #_y
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
-	ld	a,-9 (ix)
+	ld	a, (hl)
+	ld	3 (iy), a
+	ld	a, -3 (ix)
 	add	a, #0x08
-	ld	l,a
-	ld	h,#0x00
+	ld	l, a
+	ld	h, #0x00
 	add	hl, hl
 	add	hl, hl
-	ld	a,#<(_state)
+	ld	a, #<(_state)
 	add	a, l
-	ld	-6 (ix),a
-	ld	a,#>(_state)
+	ld	-5 (ix), a
+	ld	a, #>(_state)
 	adc	a, h
-	ld	-5 (ix),a
-	ld	l,-6 (ix)
-	ld	h,-5 (ix)
-	ld	a,(hl)
-	ld	iy,#_z
-	ld	0 (iy),a
+	ld	-4 (ix), a
+	ld	l, -5 (ix)
+	ld	h, -4 (ix)
+	ld	a, (hl)
+	ld	iy, #_z
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
-;gimli-permutation.c:49: spbox_x();
+	ld	a, (hl)
+	ld	3 (iy), a
+;gimli-permutation.c:50: spbox_x();
 	push	bc
 	push	de
 	call	_spbox_x
@@ -241,252 +174,250 @@ _main::
 	call	_spbox_z
 	pop	de
 	pop	bc
-;gimli-permutation.c:57: state[col] = z; state[col+4] = y; state[col+8] = x;
-	ld	iy,#_z
-	ld	a,0 (iy)
-	ld	(de),a
+;gimli-permutation.c:58: state[col] = z; state[col+4] = y; state[col+8] = x;
+	ld	iy, #_z
+	ld	a, 0 (iy)
+	ld	(de), a
 	inc	de
-	ld	a,1 (iy)
-	ld	(de),a
+	ld	a, 1 (iy)
+	ld	(de), a
 	inc	de
-	ld	a,2 (iy)
-	ld	(de),a
+	ld	a, 2 (iy)
+	ld	(de), a
 	inc	de
-	ld	a,3 (iy)
-	ld	(de),a
-	ld	iy,#_y
-	ld	a,0 (iy)
-	ld	(bc),a
+	ld	a, 3 (iy)
+	ld	(de), a
+	ld	iy, #_y
+	ld	a, 0 (iy)
+	ld	(bc), a
 	inc	bc
-	ld	a,1 (iy)
-	ld	(bc),a
+	ld	a, 1 (iy)
+	ld	(bc), a
 	inc	bc
-	ld	a,2 (iy)
-	ld	(bc),a
+	ld	a, 2 (iy)
+	ld	(bc), a
 	inc	bc
-	ld	a,3 (iy)
-	ld	(bc),a
-	ld	l,-6 (ix)
-	ld	h,-5 (ix)
-	ld	iy,#_x
-	ld	a,0 (iy)
-	ld	(hl),a
+	ld	a, 3 (iy)
+	ld	(bc), a
+	ld	l, -5 (ix)
+	ld	h, -4 (ix)
+	ld	iy, #_x
+	ld	a, 0 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,1 (iy)
-	ld	(hl),a
+	ld	a, 1 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,2 (iy)
-	ld	(hl),a
+	ld	a, 2 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,3 (iy)
-	ld	(hl),a
-;gimli-permutation.c:41: for( col=0; col<4; col++ ){
-	inc	-9 (ix)
-	ld	a,-9 (ix)
+	ld	a, 3 (iy)
+	ld	(hl), a
+;gimli-permutation.c:42: for( col=0; col<4; col++ ){
+	inc	-3 (ix)
+	ld	a, -3 (ix)
 	sub	a, #0x04
-	jp	C,00112$
-;gimli-permutation.c:60: if( 0 == (round&3) ){
-	ld	a,-8 (ix)
+	jp	C, 00109$
+;gimli-permutation.c:61: if( 0 == (round&3) ){
+	ld	a, -2 (ix)
 	and	a, #0x03
-	ld	-6 (ix),a
-;gimli-permutation.c:61: x = state[0]; state[0] = state[1]; state[1] = x;
-;gimli-permutation.c:62: x = state[2]; state[2] = state[3]; state[3] = x;
-;gimli-permutation.c:60: if( 0 == (round&3) ){
-	ld	-5 (ix), #0x00
+	ld	-5 (ix), a
+;gimli-permutation.c:62: x = state[0]; state[0] = state[1]; state[1] = x;
+;gimli-permutation.c:63: x = state[2]; state[2] = state[3]; state[3] = x;
+;gimli-permutation.c:61: if( 0 == (round&3) ){
+	ld	-4 (ix), #0x00
 	ld	a, #0x00
-	or	a,-6 (ix)
-	jp	NZ,00104$
-;gimli-permutation.c:61: x = state[0]; state[0] = state[1]; state[1] = x;
+	or	a, -5 (ix)
+	jp	NZ, 00103$
+;gimli-permutation.c:62: x = state[0]; state[0] = state[1]; state[1] = x;
 	ld	hl, #_state + 0
-	ld	a,(hl)
-	ld	0 (iy),a
+	ld	a, (hl)
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
-	ld	de,#(_state + 0x0004)
-	ld	hl, #0x0005
+	ld	a, (hl)
+	ld	3 (iy), a
+	ld	de, #(_state + 0x0004)
+	ld	hl, #0x0000
 	add	hl, sp
 	ex	de, hl
 	ld	bc, #0x0004
 	ldir
-	ld	de,#_state
-	ld	hl, #0x0005
+	ld	de, #_state
+	ld	hl, #0x0000
 	add	hl, sp
 	ld	bc, #0x0004
 	ldir
-	ld	hl,#(_state + 0x0004)
-	ld	a,0 (iy)
-	ld	(hl),a
+	ld	hl, #(_state + 0x0004)
+	ld	a, 0 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,1 (iy)
-	ld	(hl),a
+	ld	a, 1 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,2 (iy)
-	ld	(hl),a
+	ld	a, 2 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,3 (iy)
-	ld	(hl),a
-;gimli-permutation.c:62: x = state[2]; state[2] = state[3]; state[3] = x;
+	ld	a, 3 (iy)
+	ld	(hl), a
+;gimli-permutation.c:63: x = state[2]; state[2] = state[3]; state[3] = x;
 	ld	hl, #(_state + 0x0008) + 0
-	ld	a,(hl)
-	ld	0 (iy),a
+	ld	a, (hl)
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
+	ld	a, (hl)
+	ld	3 (iy), a
 	ld	bc, (#(_state + 0x000c) + 0)
 	ld	de, (#(_state + 0x000c) + 2)
 	ld	((_state + 0x0008)), bc
 	ld	((_state + 0x0008)+2), de
-	ld	hl,#(_state + 0x000c)
-	ld	a,0 (iy)
-	ld	(hl),a
+	ld	hl, #(_state + 0x000c)
+	ld	a, 0 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,1 (iy)
-	ld	(hl),a
+	ld	a, 1 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,2 (iy)
-	ld	(hl),a
+	ld	a, 2 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,3 (iy)
-	ld	(hl),a
-00104$:
-;gimli-permutation.c:65: if( 2 == (round&3) ){
-	ld	a,-6 (ix)
+	ld	a, 3 (iy)
+	ld	(hl), a
+00103$:
+;gimli-permutation.c:66: if( 2 == (round&3) ){
+	ld	a, -5 (ix)
 	sub	a, #0x02
-	jp	NZ,00106$
-	ld	a,-5 (ix)
-	or	a, a
-	jr	NZ,00106$
-;gimli-permutation.c:66: x = state[0]; state[0] = state[2]; state[2] = x;
+	or	a, -4 (ix)
+	jr	NZ,00105$
+;gimli-permutation.c:67: x = state[0]; state[0] = state[2]; state[2] = x;
 	ld	hl, #_state + 0
-	ld	a,(hl)
-	ld	iy,#_x
-	ld	0 (iy),a
+	ld	a, (hl)
+	ld	iy, #_x
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
+	ld	a, (hl)
+	ld	3 (iy), a
 	ld	bc, (#(_state + 0x0008) + 0)
 	ld	de, (#(_state + 0x0008) + 2)
 	ld	(_state), bc
 	ld	(_state+2), de
-	ld	hl,#(_state + 0x0008)
-	ld	a,0 (iy)
-	ld	(hl),a
+	ld	hl, #(_state + 0x0008)
+	ld	a, 0 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,1 (iy)
-	ld	(hl),a
+	ld	a, 1 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,2 (iy)
-	ld	(hl),a
+	ld	a, 2 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,3 (iy)
-	ld	(hl),a
-;gimli-permutation.c:67: x = state[1]; state[1] = state[3]; state[3] = x;
+	ld	a, 3 (iy)
+	ld	(hl), a
+;gimli-permutation.c:68: x = state[1]; state[1] = state[3]; state[3] = x;
 	ld	hl, #(_state + 0x0004) + 0
-	ld	a,(hl)
-	ld	0 (iy),a
+	ld	a, (hl)
+	ld	0 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	1 (iy),a
+	ld	a, (hl)
+	ld	1 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	2 (iy),a
+	ld	a, (hl)
+	ld	2 (iy), a
 	inc	hl
-	ld	a,(hl)
-	ld	3 (iy),a
+	ld	a, (hl)
+	ld	3 (iy), a
 	ld	bc, (#(_state + 0x000c) + 0)
 	ld	de, (#(_state + 0x000c) + 2)
 	ld	((_state + 0x0004)), bc
 	ld	((_state + 0x0004)+2), de
-	ld	hl,#(_state + 0x000c)
-	ld	a,0 (iy)
-	ld	(hl),a
+	ld	hl, #(_state + 0x000c)
+	ld	a, 0 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,1 (iy)
-	ld	(hl),a
+	ld	a, 1 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,2 (iy)
-	ld	(hl),a
+	ld	a, 2 (iy)
+	ld	(hl), a
 	inc	hl
-	ld	a,3 (iy)
-	ld	(hl),a
-00106$:
-;gimli-permutation.c:70: if( 0 == (round&3) ){
-	ld	a,-5 (ix)
-	or	a,-6 (ix)
-	jr	NZ,00115$
-;gimli-permutation.c:71: state[0] = state[0] ^ ((unsigned long) 0x9e377900 | (unsigned long)round);
-	ld	de,#_state
-	ld	hl, #0x0005
+	ld	a, 3 (iy)
+	ld	(hl), a
+00105$:
+;gimli-permutation.c:71: if( 0 == (round&3) ){
+	ld	a, -4 (ix)
+	or	a, -5 (ix)
+	jr	NZ,00112$
+;gimli-permutation.c:72: state[0] = state[0] ^ ((unsigned long) 0x9e377900 | (unsigned long)round);
+	ld	de, #_state
+	ld	hl, #0x0000
 	add	hl, sp
 	ex	de, hl
 	ld	bc, #0x0004
 	ldir
-	ld	c,-8 (ix)
-	ld	b,-7 (ix)
-	ld	a,-7 (ix)
+	ld	c, -2 (ix)
+	ld	b, -1 (ix)
+	ld	a, b
 	rla
 	sbc	a, a
-	ld	e,a
-	ld	d,a
-	ld	a,b
+	ld	e, a
+	ld	d, a
+	ld	a, b
 	or	a, #0x79
-	ld	b,a
-	ld	a,e
+	ld	b, a
+	ld	a, e
 	or	a, #0x37
-	ld	e,a
-	ld	a,d
+	ld	e, a
+	ld	a, d
 	or	a, #0x9e
-	ld	d,a
-	ld	a,c
-	xor	a, -4 (ix)
-	ld	c,a
-	ld	a,b
-	xor	a, -3 (ix)
-	ld	b,a
-	ld	a,e
-	xor	a, -2 (ix)
-	ld	e,a
-	ld	a,d
-	xor	a, -1 (ix)
-	ld	d,a
+	ld	d, a
+	ld	a, c
+	xor	a, -9 (ix)
+	ld	c, a
+	ld	a, b
+	xor	a, -8 (ix)
+	ld	b, a
+	ld	a, e
+	xor	a, -7 (ix)
+	ld	e, a
+	ld	a, d
+	xor	a, -6 (ix)
+	ld	d, a
 	ld	(_state), bc
 	ld	(_state+2), de
-00115$:
-;gimli-permutation.c:40: for( round=24; round > 0; round-- ){
-	ld	l,-8 (ix)
-	ld	h,-7 (ix)
+00112$:
+;gimli-permutation.c:41: for( round=24; round > 0; round-- ){
+	ld	l, -2 (ix)
+	ld	h, -1 (ix)
 	dec	hl
-	ld	-8 (ix),l
-	ld	-7 (ix),h
+	ld	-2 (ix), l
+	ld	-1 (ix), h
 	xor	a, a
-	cp	a, -8 (ix)
-	sbc	a, -7 (ix)
-	jp	PO, 00159$
+	cp	a, -2 (ix)
+	sbc	a, -1 (ix)
+	jp	PO, 00147$
 	xor	a, #0x80
-00159$:
-	jp	M,00120$
-;gimli-permutation.c:78: state_print();
+00147$:
+	jp	M, 00115$
+;gimli-permutation.c:79: state_print();
 	call	_state_print
-;gimli-permutation.c:85: __endasm;
+;gimli-permutation.c:86: __endasm;
 	ld	a,#0x0d ; CR
 	call	0x33 ; Print it
 	ld	hl,#0x6cc ; BASIC command line
@@ -494,21 +425,38 @@ _main::
 	ld	sp, ix
 	pop	ix
 	ret
-;gimli-permutation.c:89: void spbox_zerocy(){
+_hex:
+	.db #0x30	; 48	'0'
+	.db #0x31	; 49	'1'
+	.db #0x32	; 50	'2'
+	.db #0x33	; 51	'3'
+	.db #0x34	; 52	'4'
+	.db #0x35	; 53	'5'
+	.db #0x36	; 54	'6'
+	.db #0x37	; 55	'7'
+	.db #0x38	; 56	'8'
+	.db #0x39	; 57	'9'
+	.db #0x41	; 65	'A'
+	.db #0x42	; 66	'B'
+	.db #0x43	; 67	'C'
+	.db #0x44	; 68	'D'
+	.db #0x45	; 69	'E'
+	.db #0x46	; 70	'F'
+;gimli-permutation.c:90: void spbox_zerocy(){
 ;	---------------------------------
 ; Function spbox_zerocy
 ; ---------------------------------
 _spbox_zerocy::
-;gimli-permutation.c:90: cy = 0;
+;gimli-permutation.c:91: cy = 0;
 	ld	hl,#_cy + 0
 	ld	(hl), #0x00
 	ret
-;gimli-permutation.c:95: void spbox_rotate( char col ){
+;gimli-permutation.c:96: void spbox_rotate( char col ){
 ;	---------------------------------
 ; Function spbox_rotate
 ; ---------------------------------
 _spbox_rotate::
-;gimli-permutation.c:122: __endasm;
+;gimli-permutation.c:123: __endasm;
 	push	ix
 	ld	ix,#0
 	add	ix,sp
@@ -531,7 +479,7 @@ _spbox_rotate::
 	ld	b,#0x00
 	ldir
 	ld	(de),a;
-;gimli-permutation.c:161: __endasm;
+;gimli-permutation.c:162: __endasm;
 	ld	l,4 (ix)
 	ld	a,4 (ix)
 	rla
@@ -564,7 +512,7 @@ _spbox_rotate::
 	rl	2 (iy)
 	rl	3 (iy)
 	pop	ix
-;gimli-permutation.c:162: return;
+;gimli-permutation.c:163: return;
 	ret
 ;gimli-spboxx.c:11: void spbox_x(){
 ;	---------------------------------
@@ -962,23 +910,6 @@ _state_print::
 	.area _INITIALIZER
 __xinit__cy:
 	.db #0x00	; 0
-__xinit__hex:
-	.db #0x30	; 48	'0'
-	.db #0x31	; 49	'1'
-	.db #0x32	; 50	'2'
-	.db #0x33	; 51	'3'
-	.db #0x34	; 52	'4'
-	.db #0x35	; 53	'5'
-	.db #0x36	; 54	'6'
-	.db #0x37	; 55	'7'
-	.db #0x38	; 56	'8'
-	.db #0x39	; 57	'9'
-	.db #0x41	; 65	'A'
-	.db #0x42	; 66	'B'
-	.db #0x43	; 67	'C'
-	.db #0x44	; 68	'D'
-	.db #0x45	; 69	'E'
-	.db #0x46	; 70	'F'
 __xinit__state:
 	.byte #0x00,#0x00,#0x00,#0x00	; 0
 	.db 0x00

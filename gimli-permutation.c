@@ -2,19 +2,34 @@
 /*   sdcc -mz80 -D_TRS80 --no-std-crt0 --code-loc 0x7704 --data-loc 0x7f9c gimli-permutation.c */
 /*   python ihx2cas.py -n ROTATE -o rotate.cas gimli-permutation.ihx */
 
+/* a) Protect memory (MEMORY SIZE ?) at 30467 which is 0x7704 - 1. */
+
+/* b) Then state is placed at address 32689 (0x7FB1), so that the */
+/* permutation can be driven from BASIC as e.g. in: */
+/* 10 POKE16526,4:POKE16527,119 */
+/* 20 FORI=0TO47:POKEI+32689,0:NEXTI */
+/* 30 A$="MESSAGE" */
+/* 40 N=LEN(A$):FORI=1TON:POKEI+32688,ASC(RIGHT$(A$,N-I+1)):NEXTI */
+/* 100 X=USR(0) */
+
+/* c) In the following code the state ends up initialized once the */
+/* system cassette is loaded. Do not forget to POKE the 48 initial */
+/* bytes at address 32689 et sq. */
+
 #ifndef _TRS80
 #include <stdio.h>
 #endif
 
 unsigned long x, y, z, u, v;
 /* Carry bytes in SP-box */
-char cy = 0;
-char hexc;
-char hex[16] = { 0x30, 0x31, 0x32, 0x33,
-		 0x34, 0x35, 0x36, 0x37,
-		 0x38, 0x39, 0x41, 0x42,
-		 0x43, 0x44, 0x45, 0x46 };
+unsigned char cy = 0;
+/* const unsigned char hex[]="0123456789ABCDEF"; */
 unsigned long state[12] = {0};
+const unsigned char hex[16] = {
+  0x30, 0x31, 0x32, 0x33,
+  0x34, 0x35, 0x36, 0x37,
+  0x38, 0x39, 0x41, 0x42,
+  0x43, 0x44, 0x45, 0x46 };
 
 /* Forward declarations */
 void spbox_x();
@@ -27,16 +42,16 @@ void state_print();
 void main( void ){
   int round;
   char col;
-#ifdef _TRS80
-  hex[0]=0x30; hex[1]=0x31; hex[2]=0x32; hex[3]=0x33;
-  hex[4]=0x34; hex[5]=0x35; hex[6]=0x36; hex[7]=0x37;
-  hex[8]=0x38; hex[9]=0x39; hex[10]=0x41; hex[11]=0x42;
-  hex[12]=0x43; hex[13]=0x44; hex[14]=0x45; hex[15]=0x46;
+/* #ifdef _TRS80 */
+/*   hex[0]=0x30; hex[1]=0x31; hex[2]=0x32; hex[3]=0x33; */
+/*   hex[4]=0x34; hex[5]=0x35; hex[6]=0x36; hex[7]=0x37; */
+/*   hex[8]=0x38; hex[9]=0x39; hex[10]=0x41; hex[11]=0x42; */
+/*   hex[12]=0x43; hex[13]=0x44; hex[14]=0x45; hex[15]=0x46; */
 
-  for( round=0; round<12; round++ ){
-    state[round] = (unsigned long)0;
-  }
-#endif
+/*   for( round=0; round<12; round++ ){ */
+/*     state[round] = (unsigned long)0; */
+/*   } */
+/* #endif */
   for( round=24; round > 0; round-- ){
     for( col=0; col<4; col++ ){
       /* Zero buffer for carry bits */
@@ -209,4 +224,3 @@ void state_print(){
   printf( "\n" );
 }
 #endif
-
