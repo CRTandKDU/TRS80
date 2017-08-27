@@ -35,7 +35,7 @@ Boot the emulator, or better a real Model 1 16K (BASIC Level II), and answer:
 
 **30467**
 
-to the MEMORY SIZE?  question.
+to the MEMORY SIZE?  question. (This is 1 byte before the location where the SYSTEM cassette will drop the machine code: 0x7704.)
 
 Place the `rotate.cas` cassette file in the tape emulator or in the PlayCAS aplication, then at the `>` prompt on the TRS-80 issue the following commands:
 
@@ -46,10 +46,23 @@ and after the machine code is loaded,
 
     *? /
 
-to start execution of the Gimli permutation on a hard-coded all-null initial state. Refer to the paper for additional usage scenarios.
+to start execution of the Gimli permutation on a random initial state. Refer to the paper for additional usage scenarios.
 <p align="center">
 <img src="https://github.com/CRTandKDU/TRS80/blob/master/rotate-2.png" width="400"  />
 </p>
+The screenshot shows the result of running the Gimli permutation with a null initial state (48 zero bytes). With the 0x7704 
+machine code entry point and default data location, the state ends up at address 32689 (0x7fb1). These addresses can be used
+from BASIC (with the usual POKE, PEEK, and USR combinations) to drive Gimli. (Note that in this variant, once Gimli is performed
+the machine codes jumps back to BASIC not to the calling program.) An example driver:
+
+```basic
+10 POKE16526,4:POKE16527,119
+20 FORI=0TO47:POKEI+32689,0:NEXTI
+30 A$="MESSAGE"
+40 N=LEN(A$):FORI=1TON:POKEI+32688,ASC(RIGHT$(A$,N-I+1)):NEXTI
+100 X=USR(0)
+```
+
 
 
 ### Running CHACHA
